@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SkillSnap AI - Resume Analyzer</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 30px;
+      background-color: #f0f0f0;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    .section {
+      background-color: white;
+      padding: 20px;
+      margin-bottom: 30px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px #ccc;
+    }
+    label, input, button, select {
+      display: block;
+      margin: 10px auto;
+      width: 80%;
+      max-width: 400px;
+      padding: 10px;
+      font-size: 16px;
+    }
+    button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    #atsResult, #gapResult {
+      margin-top: 20px;
+      padding: 10px;
+      background: #e9ecef;
+      border-radius: 6px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>SkillSnap AI - Resume Analyzer</h1>
+
+  <!-- Upload Resume -->
+  <div class="section">
+    <h2>Step 1: Upload Your Resume</h2>
+    <input type="file" id="resume" accept=".pdf,.docx"/>
+    <button onclick="uploadResume()">Upload Resume</button>
+    <p id="uploadStatus"></p>
+  </div>
+
+  <!-- ATS Score & Role Suggestion -->
+  <div class="section">
+    <h2>Step 2: Get ATS Score & Suggested Roles</h2>
+    <button onclick="getAtsScore()">Analyze ATS</button>
+    <div id="atsResult"></div>
+  </div>
+
+  <!-- Skill Gap Analysis -->
+  <div class="section">
+    <h2>Step 3: Skill Gap Analysis</h2>
+    <input type="text" id="role" placeholder="Enter job role (e.g. Frontend Developer)" />
+    <button onclick="analyzeSkillGap()">Analyze Skill Gap</button>
+    <div id="gapResult"></div>
+  </div>
+
+  <script>
+    async function uploadResume() {
+      const fileInput = document.getElementById('resume');
+      const file = fileInput.files[0];
+      const formData = new FormData();
+      formData.append('resume', file);
+
+      const res = await fetch('/upload', {
+        method: 'POST',
+        body: formData
+      });
+
+      const data = await res.json();
+      document.getElementById('uploadStatus').innerText = data.message || data.error;
+    }
+
+    async function getAtsScore() {
+      const res = await fetch('/ats-score');
+      const data = await res.json();
+
+      if (data.error) {
+        document.getElementById('atsResult').innerHTML = `<p style="color: red;">${data.error}</p>`;
+        return;
+      }
+
+      let html = `<p><strong>ATS Score:</strong> ${data.ats.score}</p>`;
+      if (data.ats.tips && data.ats.tips.length > 0) {
+        html += `<p><strong>Improvement Tips:</strong><ul>`;
+        data.ats.tips.forEach(tip => html += `<li>${tip}</li>`);
+        html += `</ul></p>`;
+      }
+      html += `<p><strong>Suggested Roles:</strong> ${data.recommended_roles.join(', ')}</p>`;
+      document.getElementById('atsResult').innerHTML = html;
+    }
+
+    async function analyzeSkillGap() {
+      const role = document.getElementById('role').value;
+      if (!role) {
+        alert("Please enter a job role before analyzing skill gap.");
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append('role', role);
+
+      const res = await fetch('/skill-gap', {
+        method: 'POST',
+        body: formData
+      });
+
+      const data = await res.json();
+
+      if (data.error) {
+        document.getElementById('gapResult').innerHTML = `<p style="color: red;">${data.error}</p>`;
+        return;
+      }
+
+      let html = `
+        <p><strong>Your Resume Skills:</strong> ${data.resume_skills.join(', ')}</p>
+        <p><strong>Required Job Skills:</strong> ${data.required_skills.join(', ')}</p>
+        <p><strong>Missing Skills:</strong> ${data.missing_skills.join(', ')}</p>
+      `;
+
+      if (data.roadmap_pdf) {
+        html += `<p><a href="${data.roadmap_pdf}" download>📄 Download Roadmap PDF</a></p>`;
+      }
+
+      document.getElementById('gapResult').innerHTML = html;
+    }
+  </script>
+
+</body>
+</html>
