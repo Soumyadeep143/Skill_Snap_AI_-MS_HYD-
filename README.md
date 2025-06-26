@@ -27,3 +27,14 @@ It evaluates resumes based on ATS standards, suggests job roles, detects skill g
 ├── roadmap.pdf             # Generated dynamically
 ├── requirements.txt        # Python dependencies
 └── README.md               # You're reading this file
+
+```
+## 🦾 Install Library
+
+```bash
+pip install -r requirements.txt
+```
+
+
+ 
+
