@@ -4,6 +4,11 @@
 It evaluates resumes based on ATS standards, suggests job roles, detects skill gaps, and generates a **PDF roadmap** with curated learning links from **Coursera**, **Udemy**, and **YouTube**.
 
 ---
+## 📛 Project Badges
+
+![Python Version](https://img.shields.io/badge/python-3.11-blue?logo=python)
+![Poetry](https://img.shields.io/badge/poetry-dependency--manager-brightgreen?logo=python)
+
 
 ## 📌 Features
 
@@ -29,10 +34,17 @@ It evaluates resumes based on ATS standards, suggests job roles, detects skill g
 └── README.md               # You're reading this file
 
 ```
-## 🦾 Install Library
+## 🦾 Install Dependencies
 
+You can install the required libraries using either **pip** or **Poetry**, depending on your setup.
+
+### Using pip
 ```bash
 pip install -r requirements.txt
+```
+### Using poetry
+```bash
+poetry install
 ```
 
 
