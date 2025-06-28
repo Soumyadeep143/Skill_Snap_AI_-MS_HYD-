@@ -6,9 +6,11 @@ It evaluates resumes based on ATS standards, suggests job roles, detects skill g
 ---
 ## 📛 Project Badges
 
-![Python Version](https://img.shields.io/badge/python-3.11-blue?logo=python)
-![Poetry](https://img.shields.io/badge/poetry-dependency--manager-brightgreen?logo=python)
-
+![Python](https://img.shields.io/badge/Python-3.11-blue?logo=python)
+![Flask](https://img.shields.io/badge/Flask-2.3-lightgrey?logo=flask)
+![Poetry](https://img.shields.io/badge/Poetry-dependency--manager-brightgreen?logo=python)
+![Platform](https://img.shields.io/badge/Made%20with-Groq%20LLaMA3-ff69b4?logo=OpenAI&logoColor=white)
+![PDF Generator](https://img.shields.io/badge/Output-PDF-informational?logo=adobeacrobatreader)
 
 ## 📌 Features
 
